@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  :root {
+    --bg:      #121820;
+    --panel:   #1a222c;
+    --line:    #2b3744;
+    --text:    #b9cfdd;   /* body: light slate, deliberately not white */
+    --head:    #f0c56a;   /* headings: amber */
+    --on:      #5fd38a;   /* good */
+    --warn:    #f2a65a;
+    --dim:     #8299a8;
+  }
+  * { box-sizing: border-box; }
+  html, body { background: var(--bg); }
+  body {
+    width: 470px; margin: 0; padding: 18px 18px 22px;
+    font: 23px/1.35 system-ui, "Segoe UI", sans-serif;
+    color: var(--text);
+  }
+  h1 { font-size: 30px; margin: 0 0 4px; color: var(--head); letter-spacing: .01em; }
+  .tag { font-size: 19px; color: var(--dim); margin: 0 0 16px; }
+  h2 { font-size: 22px; margin: 20px 0 8px; color: var(--head);
+       text-transform: uppercase; letter-spacing: .06em; }
+  label { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; cursor: pointer; }
+  input[type=checkbox] {
+    width: 26px; height: 26px; margin: 2px 0 0; flex: 0 0 auto;
+    accent-color: var(--on); cursor: pointer;
+  }
+  .sub { color: var(--dim); font-size: 18px; margin: -4px 0 10px 38px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+          padding: 14px 16px; margin: 0 0 6px; }
+  .card.lead { border-color: #35505f; }
+  hr { border: 0; border-top: 1px solid var(--line); margin: 18px 0; }
+  .row { display: flex; justify-content: space-between; gap: 14px; margin: 7px 0; font-size: 21px; }
+  .row b { color: var(--head); font-weight: 600; }
+  .note { color: var(--warn); font-size: 19px; margin-top: 12px; line-height: 1.4; }
+  .always { font-size: 19px; color: var(--dim); line-height: 1.45; margin: 6px 0 0; }
+  .always b { color: var(--text); font-weight: 600; }
+  button {
+    font: 600 21px/1 system-ui, sans-serif; color: var(--bg); background: var(--on);
+    border: 0; border-radius: 8px; padding: 13px 16px; margin: 10px 0 0; width: 100%;
+    cursor: pointer;
+  }
+  button.ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
+  button:active { filter: brightness(.9); }
+  details { margin-top: 14px; }
+  summary { font-size: 21px; color: var(--head); cursor: pointer; padding: 6px 0; }
+  details p, details li { font-size: 19px; line-height: 1.45; color: var(--text); }
+  details ul { margin: 6px 0 0; padding-left: 24px; }
+  details li { margin: 7px 0; }
+  code { font-size: 18px; color: var(--head); }
+</style>
+</head>
+<body>
+  <h1>AdVault</h1>
+  <p class="tag">Blocks the request, then hides the leftovers.</p>
+
+  <div class="card lead">
+    <label><input type="checkbox" id="enabled"> <span>Protection on</span></label>
+    <p class="always">
+      Always on, no switch: <b>ad &amp; malvertising request blocking</b> (57,000 rules) and, on
+      YouTube, <b>player recovery</b> if the picture ever comes up black. Both work everywhere and
+      there is no reason to turn them off, so they are not options.
+    </p>
+  </div>
+
+  <h2>Page ads</h2>
+  <div class="card">
+    <label><input type="checkbox" id="cosmetic"> <span>Hide page ads</span></label>
+    <label><input type="checkbox" id="cosmeticLists"> <span>Use the full selector database</span></label>
+    <label><input type="checkbox" id="uboRules"> <span>uBO site rules on other sites (not YouTube)</span></label>
+    <p class="sub">23,000 EasyList element rules across 7,700 sites, matched to the page as it loads.</p>
+  </div>
+
+  <h2>Video players</h2>
+  <div class="card">
+    <label><input type="checkbox" id="dom"> <span>Click &ldquo;Skip&rdquo; / handle flagged player ads</span></label>
+    <label><input type="checkbox" id="sponsorblock"> <span>SponsorBlock on YouTube</span></label>
+    <p class="sub">Sends a 4-character hash prefix of the video id to sponsor.ajay.app.</p>
+    <label><input type="checkbox" id="dvrSkip"> <span>Skip recorded breaks on YouTube TV</span></label>
+    <p class="sub">DVR playback only. Reads the player’s own break markers, or breaks you mark
+       with Alt+M. Nothing is guessed from the picture.</p>
+  </div>
+
+  <details id="help">
+    <summary>How this behaves on YouTube</summary>
+    <p>YouTube is the hard case, so here is exactly what happens — no guessing which switch to try.</p>
+    <ul>
+      <li><b>Skippable ads</b> are handled by <i>Click &ldquo;Skip&rdquo;</i>: AdVault mutes the
+          ad and clicks Skip the instant the button appears.</li>
+      <li><b>Non-skippable ads</b> cannot be clicked away, so AdVault seeks through the part of the
+          ad that has already downloaded, over and over, until it runs out. On a decent connection
+          a 30-second ad is gone in about two seconds. On a slow one it is limited by the download
+          itself &mdash; nothing can skip data that has not arrived yet.</li>
+      <li><b>Nothing seeks inside a YouTube ad.</b> That is what used to black the player out, so
+          it cannot happen any more.</li>
+      <li><b>Sponsor segments inside the video</b> are a different thing from ads — those are
+          <i>SponsorBlock</i>, and they come from the community, not from YouTube.</li>
+      <li><b>No rule here blocks a request YouTube's own player makes</b>, so its anti-adblock has
+          nothing of ours to notice. Third-party ad hosts are still blocked everywhere, YouTube
+          included.</li>
+      <li><b>If the player ever comes up black</b>, recovery clears it on its own and says what it
+          found in the console (filter for <code>[AdVault]</code>). You should not have to touch a
+          switch.</li>
+    </ul>
+    <p>Page ads on youtube.com — feed, sidebar, masthead — are the <i>Hide page ads</i> switch, the
+       same as any other site. <i>uBO site rules</i> deliberately does not run on YouTube; YouTube
+       is handled by the rules above instead.</p>
+  </details>
+
+  <hr>
+  <h2>This site</h2>
+  <div class="card">
+    <div class="row"><span>Rule sets live</span><b id="rs">&ndash;</b></div>
+    <div class="row"><span>Rules loaded</span><b id="rn">&ndash;</b></div>
+    <div class="row"><span>Requests stopped here</span><b id="bl">&ndash;</b></div>
+    <div class="row"><span>Elements hidden here</span><b id="cos">&ndash;</b></div>
+    <div class="row"><span>Rule set problem</span><b id="rerr">none</b></div>
+    <p class="note" id="rsnote"></p>
+    <button id="site" class="ghost">Turn off for this site</button>
+  </div>
+
+  <h2>Video players here</h2>
+  <div class="card">
+    <div class="row"><span>State</span><b id="state">&ndash;</b></div>
+    <div class="row"><span>Player ads handled</span><b id="dom_n">0</b></div>
+    <div class="row"><span>SponsorBlock skips</span><b id="sb">0</b></div>
+    <div class="row"><span>DVR breaks skipped</span><b id="dvr">0</b></div>
+    <div class="row"><span>Time skipped</span><b id="skipped">0 s</b></div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

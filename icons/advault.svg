@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="AdVault">
+  <title>AdVault</title>
+  <defs>
+    <linearGradient id="shield" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3CE8BE"/>
+      <stop offset="1" stop-color="#0E9FE9"/>
+    </linearGradient>
+    <clipPath id="shieldClip">
+      <path d="M59 82 C59 65 72 54 89 54 L423 54 C440 54 453 65 453 82
+               C453 300 400 430 256 489 C112 430 59 300 59 82 Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- silhouette rim -->
+  <path d="M59 82 C59 65 72 54 89 54 L423 54 C440 54 453 65 453 82
+           C453 300 400 430 256 489 C112 430 59 300 59 82 Z"
+        fill="#E8FDF8"/>
+
+  <!-- shield body -->
+  <g clip-path="url(#shieldClip)">
+    <path d="M73 88 C73 73 85 64 100 64 L412 64 C427 64 439 73 439 88
+             C439 296 389 419 256 474 C123 419 73 296 73 88 Z"
+          fill="url(#shield)"/>
+  </g>
+
+  <!-- vault dial -->
+  <g fill="none" stroke="#0B1220" stroke-width="27" stroke-linecap="butt">
+    <circle cx="256" cy="251" r="84"/>
+    <line x1="152" y1="147" x2="360" y2="355"/>
+    <line x1="360" y1="147" x2="152" y2="355"/>
+  </g>
+  <circle cx="256" cy="251" r="36" fill="#0B1220"/>
+</svg>
